@@ -38,6 +38,7 @@ Thumbs.db
 # Generated files
 # data/embeddings.json - Now committed to repo for GitHub Pages deployment
 # data/search.json - Now committed to repo for GitHub Pages deployment
+data/source-texts/srimad-bhagavat/canto-*.txt
 
 # Wrangler
 .wrangler/
