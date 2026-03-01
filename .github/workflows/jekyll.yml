@@ -40,7 +40,7 @@ jobs:
           pip install sanatan-verse-sdk
 
       - name: Generate embeddings
-        run: verse-embeddings --multi-collection --collections-file _data/collections.yml --output data/embeddings.json
+        run: verse-embeddings --multi-collection --collections-file _data/collections.yml --output-dir data/embeddings/providers/openai/collections
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 

@@ -47,6 +47,7 @@ function applyTheme(theme) {
         // Replace the theme folder in the path
         // Pattern: /images/{collection}/{old-theme}/ -> /images/{collection}/{new-theme}/
         // This handles the new collection-based structure: /images/bhagavad-gita/modern-minimalist/
+        // Keep replacement root-relative to avoid duplicating baseurl prefixes.
         const newSrc = currentSrc.replace(/\/images\/([^\/]+)\/[^\/]+\//, `/images/$1/${theme}/`);
         img.setAttribute('src', newSrc);
     });

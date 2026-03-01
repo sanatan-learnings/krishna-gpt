@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "provider": "openai",
+  "model": "text-embedding-3-small",
+  "files": [
+    {
+      "collection": "bhagavad-gita",
+      "path": "/data/embeddings/providers/openai/collections/bhagavad-gita.json",
+      "counts": {
+        "en": 11,
+        "hi": 11
+      }
+    }
+  ]
+}

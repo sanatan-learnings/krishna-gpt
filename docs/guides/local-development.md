@@ -33,8 +33,8 @@ brew install python3
 Clone and install dependencies:
 
 ```bash
-git clone https://github.com/sanatan-learnings/bhagavad-gita.git
-cd bhagavad-gita
+git clone https://github.com/sanatan-learnings/krishna-gpt.git
+cd krishna-gpt
 
 # Install Ruby dependencies
 bundle install
@@ -66,7 +66,7 @@ The primary command launches a local Jekyll server with automatic file-watching:
 bundle exec jekyll serve
 ```
 
-Access the site at `http://localhost:4000/bhagavad-gita/`. The server automatically rebuilds when you edit files.
+Access the site at `http://localhost:4000/krishna-gpt/`. The server automatically rebuilds when you edit files.
 
 **Useful variations:**
 ```bash
@@ -86,10 +86,15 @@ After adding or modifying verses, regenerate embeddings for the RAG system:
 
 ```bash
 # Generate with OpenAI (recommended)
-verse-embeddings --multi-collection
+verse-embeddings --multi-collection \
+  --collections-file _data/collections.yml \
+  --output-dir data/embeddings/providers/openai/collections
 
 # Or generate locally (free, no API key)
-verse-embeddings --multi-collection --provider huggingface
+verse-embeddings --multi-collection \
+  --provider huggingface \
+  --collections-file _data/collections.yml \
+  --output-dir data/embeddings/providers/huggingface-paraphrase-multilingual-mpnet-base-v2/collections
 ```
 
 See [sanatan-verse-sdk](https://github.com/sanatan-learnings/sanatan-verse-sdk) for full documentation.
@@ -110,10 +115,10 @@ See **[content-generation.md](content-generation.md)** for full workflow details
 
 ### Testing the RAG System
 
-1. Ensure embeddings are generated: `ls -lh data/embeddings.json`
+1. Ensure embeddings are generated: `ls -lh data/embeddings/providers/openai/collections/index.json`
 2. Start Jekyll server: `bundle exec jekyll serve`
-3. Navigate to `/bhagavad-gita/guidance.html`
-4. Enter your OpenAI API key (stored in browser localStorage)
+3. Navigate to `/krishna-gpt/guidance.html`
+4. If `WORKER_URL` is empty, enter your OpenAI API key (stored in browser localStorage)
 5. Ask spiritual guidance questions
 6. Verify relevant verses are retrieved
 7. Check console for debugging info (F12 → Console tab)
@@ -145,7 +150,8 @@ bundle install
 **Embeddings generation fails:**
 - Verify OpenAI API key in `.env`: `cat .env`
 - Check API key has credits: https://platform.openai.com/account/usage
-- Try local embeddings instead: `verse-embeddings --multi-collection --provider huggingface`
+- Try local embeddings instead:
+  `verse-embeddings --multi-collection --provider huggingface --collections-file _data/collections.yml --output-dir data/embeddings/providers/huggingface-paraphrase-multilingual-mpnet-base-v2/collections`
 
 **YAML syntax errors:**
 Validate verse YAML:
@@ -202,7 +208,9 @@ verse-generate --chapter 2 --verse 48
 
 **Regenerate embeddings:**
 ```bash
-verse-embeddings --multi-collection
+verse-embeddings --multi-collection \
+  --collections-file _data/collections.yml \
+  --output-dir data/embeddings/providers/openai/collections
 ```
 
 **Deploy to production:**

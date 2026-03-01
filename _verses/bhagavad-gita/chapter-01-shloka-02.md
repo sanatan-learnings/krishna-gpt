@@ -5,8 +5,8 @@ title_en: 'Chapter 2: Duryodhana Approaches His Guru'
 title_hi: 'Chapter 2: दुर्योधन अपने गुरु से मिलते हैं'
 chapter: 1
 verse_number: 2
-previous_shloka: /verses/chapter-01-shloka-01/
-next_shloka: /verses/chapter-01-shloka-03/
+previous_shloka: /gita/chapter-01-shloka-01/
+next_shloka: /gita/chapter-01-shloka-03/
 chapter_info:
   number: 1
   name_en: Arjuna's Dilemma
@@ -98,10 +98,10 @@ keywords:
   - सेना
   - भय
   - शिक्षक
-permalink: /bhagavad-gita/chapter-01-shloka-02/
+permalink: /gita/chapter-01-shloka-02/
 verse_type: chapter
-previous_verse: /bhagavad-gita/chapter-01-shloka-01/
-next_verse: /bhagavad-gita/chapter-01-shloka-03/
+previous_verse: /gita/chapter-01-shloka-01/
+next_verse: /gita/chapter-01-shloka-03/
 meaning: Sanjaya narrates that Duryodhana, upon seeing the arranged Pandava army,
   approaches his teacher (guru) and speaks.
 translation:

@@ -1,0 +1,17 @@
+{
+  "collections": [
+    {
+      "checksum": "5ab5617d17b9f039fd759b8d02e31ca3b1aabd80c98d02e160b82982a4e65f21",
+      "collection": "bhagavad-gita",
+      "counts": {
+        "en": 11,
+        "hi": 11,
+        "total": 11
+      },
+      "dimensions": 384,
+      "model": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+      "path": "bhagavad-gita.json",
+      "provider": "huggingface"
+    }
+  ]
+}

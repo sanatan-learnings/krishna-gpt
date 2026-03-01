@@ -80,7 +80,8 @@ Each `verse-generate --next` command creates:
 
 4. **Updated Files**
    - `data/scenes/bhagavad-gita.yml`: New scene description added
-   - `data/embeddings.json`: Regenerated for search
+   - `data/embeddings/providers/openai/collections/bhagavad-gita.json`: Regenerated embeddings (provider-scoped)
+   - `data/embeddings/providers/openai/collections/index.json`: Manifest updated as needed
    - Previous shloka's markdown: Navigation link updated
 
 ## Alternative Methods
@@ -146,7 +147,7 @@ done
 1. **Test Locally**:
    ```bash
    bundle exec jekyll serve
-   # Navigate to http://localhost:4000/bhagavad-gita/
+   # Navigate to http://localhost:4000/krishna-gpt/
    ```
 
 2. **Review Content**:

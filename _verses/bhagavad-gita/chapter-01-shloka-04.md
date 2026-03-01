@@ -4,8 +4,8 @@ collection_key: bhagavad-gita
 title_en: 'Chapter 4: The Mighty Warriors in Battle'
 title_hi: 'Chapter 4: युद्ध में महान योद्धाओं का उल्लेख'
 verse_number: 4
-previous_shloka: /verses/chapter-01-shloka-03/
-next_shloka: /verses/chapter-01-shloka-05/
+previous_shloka: /gita/chapter-01-shloka-03/
+next_shloka: /gita/chapter-01-shloka-05/
 chapter: 1
 chapter_info:
   number: 1
@@ -91,10 +91,10 @@ practical_application:
       strengths of others, especially in a competitive situation.
     hi: जब किसी को दूसरों की शक्तियों को मान्यता देने की आवश्यकता होती है, विशेषकर
       एक प्रतिस्पर्धात्मक स्थिति में, तब यह श्लोक पढ़ा या याद किया जा सकता है।
-permalink: /bhagavad-gita/chapter-01-shloka-04/
+permalink: /gita/chapter-01-shloka-04/
 verse_type: chapter
-previous_verse: /bhagavad-gita/chapter-01-shloka-03/
-next_verse: /bhagavad-gita/chapter-01-shloka-05/
+previous_verse: /gita/chapter-01-shloka-03/
+next_verse: /gita/chapter-01-shloka-05/
 phonetic_notes:
 - word: शूरा
   phonetic: shoo-ra

@@ -4,8 +4,8 @@ collection_key: bhagavad-gita
 title_en: 'Chapter 3: Observing the Pandava Army'
 title_hi: 'Chapter 3: पाण्डव सेना का निरीक्षण'
 verse_number: 3
-previous_shloka: /verses/chapter-01-shloka-02/
-next_shloka: /verses/chapter-01-shloka-04/
+previous_shloka: /gita/chapter-01-shloka-02/
+next_shloka: /gita/chapter-01-shloka-04/
 chapter: 1
 chapter_info:
   number: 1
@@ -103,10 +103,10 @@ practical_application:
       oneself to stay calm and composed.
     hi: जब कोई व्यक्ति चिंतित या डरा हुआ महसूस कर रहा हो, तो खुद को शांत और संयत रखने
       की याद दिलाने के लिए इस श्लोक का पाठ किया जा सकता है।
-permalink: /bhagavad-gita/chapter-01-shloka-03/
+permalink: /gita/chapter-01-shloka-03/
 verse_type: chapter
-previous_verse: /bhagavad-gita/chapter-01-shloka-02/
-next_verse: /bhagavad-gita/chapter-01-shloka-04/
+previous_verse: /gita/chapter-01-shloka-02/
+next_verse: /gita/chapter-01-shloka-04/
 phonetic_notes:
 - word: पश्यैतां
   phonetic: pa-shya-i-tām

@@ -15,6 +15,7 @@ let embeddingsData = null;
 let apiKey = null;
 let conversationHistory = [];
 let isProcessing = false;
+const BASE_URL = window.BASE_URL || '';
 
 // Configuration
 const EMBEDDING_MODEL = 'text-embedding-3-small';
@@ -25,7 +26,7 @@ const TEMPERATURE = 0.7;
 
 // Cloudflare Worker URL (set this after deploying your worker)
 // If set, the worker will be used and API key won't be required from users
-// Example: 'https://bhagavad-gita-api.your-subdomain.workers.dev'
+// Example: 'https://krishna-gpt-api.your-subdomain.workers.dev'
 const WORKER_URL = ''; // Leave empty to use user-provided API key mode
 
 /**
@@ -72,7 +73,7 @@ function initGuidanceSystem() {
  */
 async function loadEmbeddings() {
     try {
-        const response = await fetch('/bhagavad-gita/data/embeddings.json');
+        const response = await fetch(`${BASE_URL}/data/embeddings.json`);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }

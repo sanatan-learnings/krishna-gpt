@@ -1,7 +1,7 @@
 # Site settings
-title: "Bhagavad Gita: A Comprehensive Guide"
-description: "An interactive guide to the Bhagavad Gita with verse-by-verse analysis, translations, and spiritual guidance"
-baseurl: "/bhagavad-gita"
+title: "Krishna GPT: Lessons from Sri Krishna"
+description: "An interactive guide to Krishna's teachings across sacred texts, starting with the Bhagavad Gita"
+baseurl: "/krishna-gpt"
 url: "https://sanatan-learnings.github.io"
 
 # Collections

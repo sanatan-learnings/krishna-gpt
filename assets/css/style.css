@@ -241,6 +241,13 @@ main {
     color: #666;
 }
 
+.hero-section .hero-description {
+    margin: 0.5rem auto 0;
+    max-width: 740px;
+    color: #555;
+    font-size: 1rem;
+}
+
 .title-image-container {
     margin: 0 auto 0.75rem;
     max-width: 400px;
@@ -397,6 +404,119 @@ main {
     gap: 15px;
     margin: 1.5rem 0 1rem;
     flex-wrap: wrap;
+}
+
+/* Collections */
+.collections-section,
+.coming-soon-section {
+    margin: 2.5rem 0;
+    text-align: center;
+}
+
+.collections-section h2,
+.coming-soon-section h2 {
+    color: #ff6b35;
+    margin-bottom: 0.75rem;
+    font-size: 1.8rem;
+}
+
+.collections-section .section-subtitle,
+.coming-soon-section .section-subtitle {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.collections-grid,
+.coming-soon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.collection-card,
+.coming-soon-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.collection-card:hover {
+    transform: translateY(-4px);
+    border-color: #ff6b35;
+    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.2);
+}
+
+.collection-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left;
+    margin-bottom: 0.75rem;
+}
+
+.collection-icon {
+    font-size: 1.6rem;
+}
+
+.collection-title h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.collection-author {
+    margin: 0.15rem 0 0;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.collection-description {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0.75rem 0;
+    text-align: left;
+}
+
+.collection-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.collection-link {
+    color: #ff6b35;
+    font-weight: 600;
+}
+
+.coming-soon-card {
+    text-align: left;
+    background: #f9f9f9;
+    border-style: dashed;
+}
+
+.coming-soon-card h4 {
+    margin: 0.5rem 0 0.25rem;
+    font-size: 1.05rem;
+}
+
+.coming-soon-author {
+    color: #777;
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+}
+
+.coming-soon-description {
+    color: #666;
+    font-size: 0.95rem;
 }
 
 .btn-primary,

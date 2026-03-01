@@ -24,13 +24,13 @@ The Bhagavad Gita project uses a **static site generation approach** combining J
 ## AI & Semantic Search
 
 **Embeddings:**
-OpenAI's text-embedding-3-small generates 1536-dimensional embeddings for all verses. Alternative local generation available via sentence-transformers (384 dimensions, free). One-time generation cost approximately $0.10 for complete Gita using OpenAI.
+Provider-scoped embeddings are stored per collection under `data/embeddings/providers/{provider}/collections/`. OpenAI (`text-embedding-3-small`) is the default, with optional Hugging Face and Bedrock Cohere support.
 
 **Spiritual Guidance (RAG System):**
 The guidance interface implements retrieval augmented generation combining semantic search via cosine similarity with GPT-4o for context-aware responses. Users query the Gita teachings, the system finds relevant verses through embedding similarity, then GPT-4o provides spiritual guidance grounded in actual scripture.
 
 **API Architecture:**
-Two deployment modes available: (1) User-provided OpenAI API key stored locally in browser localStorage, or (2) Cloudflare Worker proxy handling API requests securely without exposing credentials. Semantic search operates entirely client-side in JavaScript.
+Two deployment modes are available: (1) user-provided OpenAI API key stored locally in browser localStorage, or (2) Cloudflare Worker proxy handling chat + embeddings provider routes (OpenAI, Hugging Face, Bedrock) without exposing credentials. Semantic search ranking runs client-side in JavaScript.
 
 ## Development Workflow
 
@@ -58,8 +58,8 @@ Static site generation eliminates server overhead, achieving instant page loads 
 
 **Data Flow:**
 1. **Content Creation:** `verse-generate` → GPT-4 verse content → DALL-E 3 images → ElevenLabs audio → Markdown file
-2. **Search Index:** Verse files → `verse-embeddings` → OpenAI/HuggingFace → JSON output
-3. **User Query:** Question → Client-side semantic search → GPT-4o guidance → Response with verse citations
+2. **Search Index:** Verse files → `data/search.json` Liquid template → build-time search JSON
+3. **User Query:** Question → Client-side semantic search over provider-scoped embeddings → GPT-4o guidance → Response with verse citations
 
 ## Current Features & Roadmap
 
@@ -76,7 +76,7 @@ Static site generation eliminates server overhead, achieving instant page loads 
 - Parser script for extracting verses from source text
 
 **Planned Enhancements:**
-- Full-text search with Lunr.js
+- More enabled Krishna collections
 - Progressive web app capabilities
 - Complete all 701 verses
 - Hindi commentary narration

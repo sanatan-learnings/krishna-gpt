@@ -5,7 +5,7 @@ title_en: 'Chapter 1: Dhritarashtra''s Inquiry'
 title_hi: 'Chapter 1: धृतराष्ट्र का प्रश्न'
 chapter: 1
 verse_number: 1
-next_shloka: /verses/chapter-01-shloka-02/
+next_shloka: /gita/chapter-01-shloka-02/
 chapter_info:
   number: 1
   name_en: Arjuna's Dilemma
@@ -116,9 +116,9 @@ practical_application:
       to remind oneself of the importance of righteousness.
     hi: जब नैतिक या नैतिक दुविधा का सामना कर रहे हों, तो इस श्लोक को पढ़ा या याद किया
       जा सकता है, ताकि अपने आप को धर्म के महत्व की याद दिलाएं।
-permalink: /bhagavad-gita/chapter-01-shloka-01/
+permalink: /gita/chapter-01-shloka-01/
 verse_type: chapter
-next_verse: /bhagavad-gita/chapter-01-shloka-02/
+next_verse: /gita/chapter-01-shloka-02/
 meaning: Dhritarashtra, the blind king, is asking his advisor Sanjaya about what his
   sons (Kauravas) and the sons of Pandu (Pandavas) did in the battlefield of Kurukshetra,
   which is also known as the field of dharma or righteousness.

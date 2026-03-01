@@ -1,12 +1,12 @@
-# Bhagavad Gita: A Comprehensive Guide
+# Krishna GPT: Lessons from Sri Krishna
 
-An interactive web-based guide to the Bhagavad Gita featuring shloka-by-shloka analysis, bilingual translations, and AI-powered spiritual guidance.
+An interactive web-based guide to Sri Krishna's teachings across sacred texts, featuring shloka-by-shloka analysis, bilingual translations, and AI-powered spiritual guidance. The Bhagavad Gita is the first and most complete collection.
 
-🌐 **[View Live Site](https://sanatan-learnings.github.io/bhagavad-gita)**
+🌐 **[View Live Site](https://sanatan-learnings.github.io/krishna-gpt)**
 
 ## 🌟 Features
 
-- **Comprehensive Shloka Analysis**: Each shloka includes:
+- **Comprehensive Shloka Analysis** (Bhagavad Gita collection):
   - Original Sanskrit (Devanagari script)
   - Roman transliteration
   - Word-by-word meanings
@@ -17,11 +17,11 @@ An interactive web-based guide to the Bhagavad Gita featuring shloka-by-shloka a
 
 - **Bilingual Support**: Full interface in English and Hindi with seamless language switching
 
-- **AI-Powered Spiritual Guidance**: Ask questions about Gita teachings and receive contextual answers powered by:
-  - OpenAI or Local embeddings (HuggingFace Transformers)
+- **AI-Powered Spiritual Guidance**: Ask questions about Krishna's teachings and receive contextual answers powered by:
+  - OpenAI / AWS Bedrock Cohere / Hugging Face embeddings
   - Semantic search (Retrieval Augmented Generation)
   - GPT-4o for thoughtful spiritual responses
-  - Cloudflare Worker for secure API management
+  - Cloudflare Worker for secure API management and provider routing
 
 - **Full-Text Search**: Search across all shlokas, translations, and meanings
 
@@ -31,7 +31,7 @@ An interactive web-based guide to the Bhagavad Gita featuring shloka-by-shloka a
 
 ## 📚 Current Status
 
-**Chapters Included**: All 18 chapters (701 shlokas)
+**Primary Collection**: Bhagavad Gita (18 chapters, 701 shlokas)
 
 **Content Status**:
 - ✅ Complete project structure
@@ -55,8 +55,8 @@ An interactive web-based guide to the Bhagavad Gita featuring shloka-by-shloka a
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/sanatan-learnings/bhagavad-gita.git
-   cd bhagavad-gita
+   git clone https://github.com/sanatan-learnings/krishna-gpt.git
+   cd krishna-gpt
    ```
 
 2. **Install dependencies**
@@ -71,7 +71,7 @@ An interactive web-based guide to the Bhagavad Gita featuring shloka-by-shloka a
    ```
 
 4. **View the site**
-   Open http://localhost:4000/bhagavad-gita in your browser
+   Open http://localhost:4000/krishna-gpt in your browser
 
 **To generate new shloka content:** See **[Content Generation Guide](docs/guides/content-generation.md)**
 
@@ -94,13 +94,15 @@ An interactive web-based guide to the Bhagavad Gita featuring shloka-by-shloka a
 ## 📁 Project Structure
 
 ```
-bhagavad-gita/
+krishna-gpt/
 ├── _verses/              # Shloka content files (YAML)
 ├── _layouts/             # HTML templates
 ├── _data/
 │   ├── translations/     # UI strings (en.yml, hi.yml)
 │   ├── collections.yml   # Collection metadata
-│   └── themes.yml       # Image theme definitions
+│   ├── embeddings.yml    # Embeddings provider configuration
+│   ├── chat.yml          # Chat provider configuration
+│   └── themes.yml        # Image theme definitions
 ├── assets/
 │   ├── css/             # Styling
 │   └── js/              # Language, navigation, RAG system
@@ -111,8 +113,11 @@ bhagavad-gita/
 │   ├── themes/          # Theme configurations
 │   ├── source-texts/    # Original source texts
 │   │   └── bhagavad-gita-sanskrit-devanagari.txt
-│   ├── embeddings.json  # Generated embeddings for RAG
-│   └── search.json      # Search index
+│   ├── embeddings/       # Provider-scoped embeddings
+│   │   └── providers/openai/collections/
+│   │       ├── index.json
+│   │       └── bhagavad-gita.json
+│   └── search.json       # Liquid template generated at build
 ├── scripts/
 │   ├── parse_gita.py    # Parser for extracting verses from source
 │   ├── README.md        # Scripts documentation
@@ -156,8 +161,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- [Report issues](https://github.com/sanatan-learnings/bhagavad-gita/issues)
-- [Ask questions](https://github.com/sanatan-learnings/bhagavad-gita/discussions)
+- [Report issues](https://github.com/sanatan-learnings/krishna-gpt/issues)
+- [Ask questions](https://github.com/sanatan-learnings/krishna-gpt/discussions)
 
 ---
 

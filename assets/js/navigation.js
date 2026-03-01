@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Home key or 'h' - go to home
             if (e.keyCode === 36 || e.keyCode === 72) {
-                window.location.href = '/bhagavad-gita/';
+                const baseUrl = window.BASE_URL || '';
+                window.location.href = `${baseUrl}/`;
             }
         });
 

@@ -40,12 +40,12 @@ The `parse_gita.py` script extracts verses from a canonical Devanagari text file
 
 ### Option 1: From File
 ```bash
-python scripts/parse_gita.py gita_complete_text.txt > data/verses/bhagavad-gita-new.yaml
+python scripts/parse_gita.py gita_complete_text.txt > data/verses/krishna-gpt-new.yaml
 ```
 
 ### Option 2: From Stdin
 ```bash
-cat gita_complete_text.txt | python scripts/parse_gita.py > data/verses/bhagavad-gita-new.yaml
+cat gita_complete_text.txt | python scripts/parse_gita.py > data/verses/krishna-gpt-new.yaml
 ```
 
 ### Option 3: Test with Sample

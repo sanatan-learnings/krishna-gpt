@@ -4,8 +4,8 @@ collection_key: bhagavad-gita
 title_en: 'Chapter 5: The Mighty Warriors'
 title_hi: 'Chapter 5: शूरवीर योद्धा'
 verse_number: 5
-previous_shloka: /verses/chapter-01-shloka-04/
-next_shloka: /verses/chapter-01-shloka-06/
+previous_shloka: /gita/chapter-01-shloka-04/
+next_shloka: /gita/chapter-01-shloka-06/
 chapter: 1
 chapter_info:
   number: 1
@@ -78,8 +78,8 @@ meaning: 'The verse lists the names of mighty warriors: Dhristaketu, Chekitana, 
 translation:
   en: Dhristaketu, Chekitana, the valiant King of Kashi, Purujit, Kuntibhoja, and
     Shaibya, all great human leaders.
-next_verse: /bhagavad-gita/chapter-01-shloka-06/
-permalink: /bhagavad-gita/chapter-01-shloka-05/
+next_verse: /gita/chapter-01-shloka-06/
+permalink: /gita/chapter-01-shloka-05/
 verse_type: chapter
-previous_verse: /bhagavad-gita/chapter-01-shloka-04/
+previous_verse: /gita/chapter-01-shloka-04/
 ---

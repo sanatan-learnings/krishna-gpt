@@ -1,13 +1,13 @@
 ---
 layout: verse
 collection_key: bhagavad-gita
-permalink: /bhagavad-gita/chapter-01-shloka-09/
+permalink: /gita/chapter-01-shloka-09/
 title_en: 'Chapter 9: The Brave Warriors Ready to Sacrifice'
 title_hi: 'Chapter 9: बली योद्धाओं की त्यागभावना'
 chapter: 1
 verse_number: 9
 verse_type: chapter
-previous_verse: /bhagavad-gita/chapter-01-shloka-08/
+previous_verse: /gita/chapter-01-shloka-08/
 image: /images/bhagavad-gita/modern-minimalist/chapter-01-shloka-09.png
 devanagari: अन्ये च बहवः शूरा मदर्थे त्यक्तजीविताः। नानाशस्त्रप्रहरणाः सर्वे युद्धविशारदाः
   ॥ १-९॥
@@ -110,5 +110,5 @@ meaning: The verse talks about 'anye' (others) who are 'bahavaḥ' (many) and '�
 translation:
   en: There are many other brave warriors who are ready to sacrifice their lives for
     my sake. They are all equipped with various weapons and are skilled in warfare.
-next_verse: /bhagavad-gita/chapter-01-shloka-10/
+next_verse: /gita/chapter-01-shloka-10/
 ---

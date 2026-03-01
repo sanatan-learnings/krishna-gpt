@@ -1,10 +1,16 @@
 ---
 layout: default
 title: "Spiritual Guidance"
-description: "Ask questions and receive spiritual guidance based on Hanuman Chalisa verses"
+description: "Ask questions and receive spiritual guidance based on Krishna's teachings"
 ---
 {% assign t_en = site.data.translations.en %}
 {% assign t_hi = site.data.translations.hi %}
+{% assign emb = site.data.embeddings %}
+{% assign chat = site.data.chat %}
+{% assign active_provider_key = emb.active_provider | default: 'openai' %}
+{% assign active_provider = emb.providers[active_provider_key] %}
+{% assign active_chat_provider_key = chat.active_provider | default: 'openai' %}
+{% assign active_chat_provider = chat.providers[active_chat_provider_key] %}
 
 <div class="guidance-container">
     <div class="guidance-header">
@@ -88,6 +94,55 @@ description: "Ask questions and receive spiritual guidance based on Hanuman Chal
             <span data-lang="en">{{ t_en.guidance_page.clear_chat }}</span>
             <span data-lang="hi">{{ t_hi.guidance_page.clear_chat }}</span>
         </button>
+    </div>
+
+    <div class="runtime-summary">
+        <div class="runtime-summary-item">
+            <span data-lang="en">Embeddings:</span>
+            <span data-lang="hi">एम्बेडिंग:</span>
+            <strong id="runtimeProviderLabel">{{ active_provider_key }}</strong>
+            <code id="runtimeModelLabel">{{ active_provider.model }}</code>
+        </div>
+        <div class="runtime-summary-item">
+            <span data-lang="en">Chat:</span>
+            <span data-lang="hi">चैट:</span>
+            <strong id="runtimeChatProviderLabel">{{ active_chat_provider_key }}</strong>
+            <code id="runtimeChatModelLabel">{{ active_chat_provider.model }}</code>
+        </div>
+    </div>
+
+    <div class="runtime-config-panel">
+        <button id="toggleRuntimeConfig" class="btn-secondary-small" type="button">
+            <span data-lang="en">Config</span>
+            <span data-lang="hi">कॉन्फ़िग</span>
+        </button>
+        <div id="runtimeConfigBody" class="runtime-config-body" style="display: none;">
+            <div class="runtime-config-grid">
+                <label for="runtimeProviderSelect">
+                    <span data-lang="en">Embeddings provider</span>
+                    <span data-lang="hi">एम्बेडिंग प्रदाता</span>
+                </label>
+                <select id="runtimeProviderSelect">
+                    {% for provider_hash in emb.providers %}
+                    {% assign provider_key = provider_hash[0] %}
+                    {% assign provider_value = provider_hash[1] %}
+                    <option value="{{ provider_key }}">{{ provider_key }} ({{ provider_value.model }})</option>
+                    {% endfor %}
+                </select>
+                <label for="runtimeChatProviderSelect">
+                    <span data-lang="en">Chat provider</span>
+                    <span data-lang="hi">चैट प्रदाता</span>
+                </label>
+                <select id="runtimeChatProviderSelect">
+                    {% for provider_hash in chat.providers %}
+                    {% assign provider_key = provider_hash[0] %}
+                    {% assign provider_value = provider_hash[1] %}
+                    <option value="{{ provider_key }}">{{ provider_key }} ({{ provider_value.model }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="runtimeConfigStatus" class="runtime-config-status"></div>
+        </div>
     </div>
 </div>
 
@@ -301,6 +356,24 @@ description: "Ask questions and receive spiritual guidance based on Hanuman Chal
     text-decoration: underline;
 }
 
+.citation-title-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.collection-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: white;
+    font-size: 0.7em;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+    text-transform: lowercase;
+}
+
 .citation-devanagari {
     color: #666;
     font-size: 0.9em;
@@ -403,6 +476,55 @@ description: "Ask questions and receive spiritual guidance based on Hanuman Chal
     background: #5a6268;
 }
 
+.runtime-summary {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.runtime-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.runtime-config-panel {
+    margin-top: 10px;
+}
+
+.runtime-config-body {
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.runtime-config-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 10px;
+    align-items: center;
+}
+
+.runtime-config-grid select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.runtime-config-status {
+    min-height: 20px;
+    font-size: 0.9em;
+    color: #666;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
     .guidance-container {
@@ -425,7 +547,24 @@ description: "Ask questions and receive spiritual guidance based on Hanuman Chal
     .input-wrapper {
         flex-direction: column;
     }
+
+    .runtime-config-grid {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
 
+<script>
+window.EMBEDDINGS_CONFIG = {
+    provider: "{{ active_provider_key }}",
+    model: "{{ active_provider.model | default: 'text-embedding-3-small' }}",
+    indexPath: "{{ active_provider.index_path | default: '/data/embeddings/providers/openai/collections/index.json' }}",
+    providers: {{ emb.providers | jsonify }}
+};
+window.CHAT_CONFIG = {
+    provider: "{{ active_chat_provider_key }}",
+    model: "{{ active_chat_provider.model | default: 'gpt-4o' }}",
+    providers: {{ chat.providers | jsonify }}
+};
+</script>
 <script src="{{ '/assets/js/guidance.js' | relative_url }}"></script>

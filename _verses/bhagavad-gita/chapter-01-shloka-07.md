@@ -5,8 +5,8 @@ title_en: 'Chapter 7: Identifying the Distinguished Warriors'
 title_hi: 'Chapter 7: विशिष्ट योद्धाओं की पहचान'
 chapter: 1
 verse_number: 7
-previous_shloka: /verses/chapter-01-shloka-06/
-next_shloka: /verses/chapter-02-shloka-47/
+previous_shloka: /gita/chapter-01-shloka-06/
+next_shloka: /gita/chapter-02-shloka-47/
 chapter_info:
   number: 1
   name_en: Arjuna's Dilemma
@@ -134,8 +134,8 @@ meaning: Duryodhana is addressing his teacher Dronacharya (dvijottama) and is sa
 translation:
   en: But know, O best of the twice-born, the distinguished leaders of my army. For
     your information, I speak to you of them.
-next_verse: /bhagavad-gita/chapter-01-shloka-08/
-permalink: /bhagavad-gita/chapter-01-shloka-07/
+next_verse: /gita/chapter-01-shloka-08/
+permalink: /gita/chapter-01-shloka-07/
 verse_type: chapter
-previous_verse: /bhagavad-gita/chapter-01-shloka-06/
+previous_verse: /gita/chapter-01-shloka-06/
 ---

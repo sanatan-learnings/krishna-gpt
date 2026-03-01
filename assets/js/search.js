@@ -1,7 +1,15 @@
-// Bhagavad Gita Search Functionality
+// Krishna GPT Search Functionality
 
 let searchData = null;
 let currentLanguage = 'en';
+const BASE_URL = window.BASE_URL || '';
+
+function withBaseUrl(path) {
+    if (!BASE_URL) return path;
+    if (path.startsWith(BASE_URL)) return path;
+    if (path.startsWith('/')) return `${BASE_URL}${path}`;
+    return `${BASE_URL}/${path}`;
+}
 
 // Initialize search on page load
 async function initSearch() {
@@ -9,7 +17,7 @@ async function initSearch() {
 
     // Load search data
     try {
-        const response = await fetch('/bhagavad-gita/data/search.json');
+        const response = await fetch(`${BASE_URL}/data/search.json`);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
@@ -192,7 +200,8 @@ function createResultItem(verse, query) {
     // Title
     const title = document.createElement('h3');
     const titleLink = document.createElement('a');
-    titleLink.href = `/bhagavad-gita${verse.url}?lang=${lang}`;
+    const resolvedUrl = withBaseUrl(verse.url);
+    titleLink.href = `${resolvedUrl}?lang=${lang}`;
     titleLink.textContent = lang === 'hi' ? verse.title_hi : verse.title_en;
     title.appendChild(titleLink);
     div.appendChild(title);

@@ -40,7 +40,9 @@ verse-generate --collection bhagavad-gita --verse 5 --all
 
 ```bash
 # Generate embeddings for all collections
-verse-embeddings --multi-collection
+verse-embeddings --multi-collection \
+  --collections-file _data/collections.yml \
+  --output-dir data/embeddings/providers/openai/collections
 ```
 
 Uses OpenAI embeddings by default (requires OPENAI_API_KEY in .env).

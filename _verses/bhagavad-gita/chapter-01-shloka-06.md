@@ -5,8 +5,8 @@ title_en: 'Chapter 6: The Mighty Warriors in Battle'
 title_hi: 'Chapter 6: युद्ध में शूरवीर योद्धाओं का वर्णन'
 chapter: 1
 verse_number: 6
-previous_shloka: /verses/chapter-01-shloka-05/
-next_shloka: /verses/chapter-01-shloka-07/
+previous_shloka: /gita/chapter-01-shloka-05/
+next_shloka: /gita/chapter-01-shloka-07/
 chapter_info:
   number: 1
   name_en: Arjuna's Dilemma
@@ -93,8 +93,8 @@ meaning: The verse is describing the mighty warriors on the Pandava side in the 
 translation:
   en: Yudhamanyu the mighty, Uttamaujas the brave, Saubhadra and the sons of Draupadi,
     all are indeed great warriors.
-permalink: /bhagavad-gita/chapter-01-shloka-06/
+permalink: /gita/chapter-01-shloka-06/
 verse_type: chapter
-previous_verse: /bhagavad-gita/chapter-01-shloka-05/
-next_verse: /bhagavad-gita/chapter-01-shloka-07/
+previous_verse: /gita/chapter-01-shloka-05/
+next_verse: /gita/chapter-01-shloka-07/
 ---

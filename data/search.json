@@ -1,0 +1,28 @@
+---
+layout: none
+---
+[
+  {% for verse in site.verses %}
+  {% assign coll_info = site.data.collections[verse.collection_key] %}
+  {
+    "title_en": {{ verse.title_en | default: verse.title | jsonify }},
+    "title_hi": {{ verse.title_hi | default: verse.title | jsonify }},
+    "url": {{ verse.url | relative_url | jsonify }},
+    "verse_number": {{ verse.verse_number | jsonify }},
+    "image": {{ verse.image | relative_url | jsonify }},
+    "collection": {{ verse.collection_key | jsonify }},
+    "collection_name_en": {% if coll_info %}{{ coll_info.name_en | jsonify }}{% else %}null{% endif %},
+    "collection_name_hi": {% if coll_info %}{{ coll_info.name_hi | jsonify }}{% else %}null{% endif %},
+    "collection_icon": {% if coll_info %}{{ coll_info.icon | jsonify }}{% else %}null{% endif %},
+    "devanagari": {{ verse.devanagari | jsonify }},
+    "transliteration": {{ verse.transliteration | jsonify }},
+    "literal_translation_en": {% if verse.literal_translation.en %}{{ verse.literal_translation.en | jsonify }}{% else %}{{ verse.literal_translation | jsonify }}{% endif %},
+    "literal_translation_hi": {% if verse.literal_translation.hi %}{{ verse.literal_translation.hi | jsonify }}{% else %}null{% endif %},
+    "interpretive_meaning_en": {% if verse.interpretive_meaning.en %}{{ verse.interpretive_meaning.en | jsonify }}{% else %}{{ verse.interpretive_meaning | jsonify }}{% endif %},
+    "interpretive_meaning_hi": {% if verse.interpretive_meaning.hi %}{{ verse.interpretive_meaning.hi | jsonify }}{% else %}null{% endif %},
+    "story_en": {% if verse.story.en %}{{ verse.story.en | jsonify }}{% else %}{{ verse.story | jsonify }}{% endif %},
+    "story_hi": {% if verse.story.hi %}{{ verse.story.hi | jsonify }}{% else %}null{% endif %},
+    "word_meanings": {{ verse.word_meanings | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+]

@@ -49,21 +49,21 @@ verse-embeddings --verses-dir _verses --output data/embeddings.json
 ```bash
 # Test locally after changes
 bundle exec jekyll serve
-# Visit http://localhost:4000/bhagavad-gita
+# Visit http://localhost:4000/krishna-gpt
 ```
 
 ## File Structure
 
-- `_verses/bhagavad-gita/` - Shloka YAML files (chapter-XX-shloka-YY.md)
+- `_verses/krishna-gpt/` - Shloka YAML files (chapter-XX-shloka-YY.md)
 - `_layouts/` - Jekyll templates
 - `_data/` - UI translations (en.yml, hi.yml) and collections.yml
 - `assets/` - CSS, JS, static assets
-- `audio/bhagavad-gita/` - Audio pronunciation files (dash-separated)
-- `images/bhagavad-gita/theme/` - Generated artwork by theme
+- `audio/krishna-gpt/` - Audio pronunciation files (dash-separated)
+- `images/krishna-gpt/theme/` - Generated artwork by theme
 - `data/` - Canonical verses, scenes, themes, embeddings
   - `verses/bhagavad-gita.yaml` - Canonical Devanagari text
-  - `scenes/bhagavad-gita.yml` - Scene descriptions for images
-  - `themes/bhagavad-gita/` - Theme configurations
+  - `scenes/krishna-gpt.yml` - Scene descriptions for images
+  - `themes/krishna-gpt/` - Theme configurations
   - `embeddings.json` - RAG embeddings for AI guidance
 - `scripts/` - Python utilities
 - `docs/` - Documentation
@@ -99,9 +99,9 @@ Required in `.env` file:
 ## Important Notes
 
 - The project uses sanatan-verse-sdk (collection-based structure)
-- Shloka files are in `_verses/bhagavad-gita/` subdirectory
+- Shloka files are in `_verses/krishna-gpt/` subdirectory
 - File naming: use dashes (chapter-01-shloka-03.md), not underscores
-- Assets are organized by collection: `images/bhagavad-gita/`, `audio/bhagavad-gita/`
+- Assets are organized by collection: `images/krishna-gpt/`, `audio/krishna-gpt/`
 - Navigation permalinks: `/verses/chapter-01-shloka-03/` (dash-separated)
 - Always test Jekyll locally after content changes
 - Embeddings must be regenerated after adding verses

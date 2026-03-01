@@ -1,0 +1,143 @@
+---
+layout: default
+title: "Bhagavad Gita"
+permalink: /gita/
+---
+{% assign t_en = site.data.translations.en %}
+{% assign t_hi = site.data.translations.hi %}
+
+<div class="hero-section">
+    <div class="hero-content">
+        <div class="gita-title-image-container">
+            <img src="{{ '/images/bhagavad-gita/modern-minimalist/title-page.png' | relative_url }}" alt="Bhagavad Gita" class="gita-title-image">
+        </div>
+        <h1>
+            <span data-lang="en">{{ t_en.gita_page.title }}</span>
+            <span data-lang="hi">{{ t_hi.gita_page.title }}</span>
+        </h1>
+        <p class="blessing">
+            <em>
+                <span data-lang="en">{{ t_en.gita_page.subtitle }}</span>
+                <span data-lang="hi">{{ t_hi.gita_page.subtitle }}</span>
+            </em>
+        </p>
+    </div>
+
+    <div class="quick-actions gita-actions">
+        <a href="{{ '/full-gita' | relative_url }}" class="btn-primary">
+            📖 <span data-lang="en">{{ t_en.gita_page.full_text }}</span><span data-lang="hi">{{ t_hi.gita_page.full_text }}</span>
+        </a>
+    </div>
+
+    <details class="about-section gita-about">
+        <summary><span data-lang="en">{{ t_en.gita_page.about_title }}</span><span data-lang="hi">{{ t_hi.gita_page.about_title }}</span></summary>
+        <p>
+            <span data-lang="en">{{ t_en.gita_page.about_p1 }}</span>
+            <span data-lang="hi">{{ t_hi.gita_page.about_p1 }}</span>
+        </p>
+        <p>
+            <span data-lang="en">{{ t_en.gita_page.about_p2 }}</span>
+            <span data-lang="hi">{{ t_hi.gita_page.about_p2 }}</span>
+        </p>
+    </details>
+</div>
+
+<section class="verse-navigation">
+    <!-- Chapter 1 -->
+    <details class="chapter-section" open>
+        {% assign chapter1_verses = site.verses | where_exp: "item", "item.chapter == 1" | sort: "verse_number" %}
+        {% assign chapter1_count = 0 %}
+        {% for verse in chapter1_verses %}
+            {% unless verse.devanagari contains "[Add" %}
+                {% assign chapter1_count = chapter1_count | plus: 1 %}
+            {% endunless %}
+        {% endfor %}
+        <summary class="chapter-header">
+            <h3>
+                <span data-lang="en">📖 Chapter 1: {{ t_en.chapter_1 }} <span class="verse-count">({{ chapter1_count }} available out of 47 total)</span></span>
+                <span data-lang="hi">📖 अध्याय 1: {{ t_hi.chapter_1 }} <span class="verse-count">(47 में से {{ chapter1_count }} उपलब्ध)</span></span>
+            </h3>
+        </summary>
+        <p class="chapter-description">
+            <span data-lang="en">
+                Arjuna's moral crisis on the battlefield - witnessing his relatives, teachers, and friends
+                on both sides of the war, he becomes overwhelmed with grief and confusion about his duty as a warrior.
+            </span>
+            <span data-lang="hi">
+                युद्धक्षेत्र में अर्जुन का नैतिक संकट - युद्ध के दोनों पक्षों में अपने रिश्तेदारों,
+                शिक्षकों और मित्रों को देखकर, वह एक योद्धा के रूप में अपने कर्तव्य के बारे में दुःख और भ्रम से अभिभूत हो जाता है।
+            </span>
+        </p>
+        <div class="verse-grid">
+            {% for verse in chapter1_verses %}
+                {% unless verse.devanagari contains "[Add" %}
+                <a href="{{ verse.url | relative_url }}" class="verse-card">
+                    {% if verse.image %}
+                    <div class="card-image">
+                        <img src="{{ verse.image | relative_url }}" alt="{{ verse.title_en }}" loading="lazy">
+                    </div>
+                    {% endif %}
+                    <div class="card-content">
+                        <div class="verse-number">
+                            <span data-lang="en">{{ t_en.verse }} {{ verse.verse_number }}</span>
+                            <span data-lang="hi">{{ t_hi.verse }} {{ verse.verse_number }}</span>
+                        </div>
+                        <div class="verse-preview">
+                            {{ verse.devanagari | truncate: 60 }}
+                        </div>
+                    </div>
+                </a>
+                {% endunless %}
+            {% endfor %}
+        </div>
+    </details>
+
+    <!-- Chapter 2 -->
+    <details class="chapter-section">
+        {% assign chapter2_verses = site.verses | where_exp: "item", "item.chapter == 2" | sort: "verse_number" %}
+        {% assign chapter2_count = 0 %}
+        {% for verse in chapter2_verses %}
+            {% unless verse.devanagari contains "[Add" %}
+                {% assign chapter2_count = chapter2_count | plus: 1 %}
+            {% endunless %}
+        {% endfor %}
+        <summary class="chapter-header">
+            <h3>
+                <span data-lang="en">📖 Chapter 2: {{ t_en.chapter_2 }} <span class="verse-count">({{ chapter2_count }} available out of 72 total)</span></span>
+                <span data-lang="hi">📖 अध्याय 2: {{ t_hi.chapter_2 }} <span class="verse-count">(72 में से {{ chapter2_count }} उपलब्ध)</span></span>
+            </h3>
+        </summary>
+        <p class="chapter-description">
+            <span data-lang="en">
+                Krishna's response containing the essence of Gita philosophy - the immortality of the soul,
+                the concept of dharma, karma yoga, and the characteristics of a self-realized person.
+            </span>
+            <span data-lang="hi">
+                गीता दर्शन के सार युक्त कृष्ण का उत्तर - आत्मा की अमरता,
+                धर्म की अवधारणा, कर्म योग, और आत्म-साक्षात्कार प्राप्त व्यक्ति की विशेषताएं।
+            </span>
+        </p>
+        <div class="verse-grid">
+            {% for verse in chapter2_verses %}
+                {% unless verse.devanagari contains "[Add" %}
+                <a href="{{ verse.url | relative_url }}" class="verse-card">
+                    {% if verse.image %}
+                    <div class="card-image">
+                        <img src="{{ verse.image | relative_url }}" alt="{{ verse.title_en }}" loading="lazy">
+                    </div>
+                    {% endif %}
+                    <div class="card-content">
+                        <div class="verse-number">
+                            <span data-lang="en">{{ t_en.verse }} {{ verse.verse_number }}</span>
+                            <span data-lang="hi">{{ t_hi.verse }} {{ verse.verse_number }}</span>
+                        </div>
+                        <div class="verse-preview">
+                            {{ verse.devanagari | truncate: 60 }}
+                        </div>
+                    </div>
+                </a>
+                {% endunless %}
+            {% endfor %}
+        </div>
+    </details>
+</section>

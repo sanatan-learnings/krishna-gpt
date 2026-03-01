@@ -1,10 +1,10 @@
 # Cloudflare Worker Setup
 
-Deploy the OpenAI API proxy to Cloudflare so users don't need their own API keys.
+Deploy the API proxy to Cloudflare so users don't need their own API keys.
 
 ## Quick Deploy
 
-If you have [verse-content-sdk](https://github.com/sanatan-learnings/verse-content-sdk) installed:
+If you have [sanatan-verse-sdk](https://github.com/sanatan-learnings/sanatan-verse-sdk) installed:
 
 ```bash
 verse-deploy
@@ -15,7 +15,7 @@ Otherwise, follow the setup steps below.
 ## Why Use This?
 
 - Users don't need to enter API keys
-- Your API key stays secure on Cloudflare
+- Your provider secrets stay secure on Cloudflare
 - Free tier: 100,000 requests/day
 - Cost: ~$0.01 per user query
 
@@ -37,11 +37,17 @@ Edit `wrangler.toml`:
 account_id = "your-account-id-here"
 ```
 
-### 3. Set API Key
+### 3. Set Secrets
 
 ```bash
 wrangler secret put OPENAI_API_KEY
-# Paste your OpenAI API key when prompted
+# Optional, if using Hugging Face embeddings
+wrangler secret put HF_TOKEN
+
+# Optional, if using Bedrock embeddings
+wrangler secret put AWS_ACCESS_KEY_ID
+wrangler secret put AWS_SECRET_ACCESS_KEY
+wrangler secret put AWS_SESSION_TOKEN   # only for temporary credentials
 ```
 
 ### 4. Deploy
@@ -50,14 +56,14 @@ wrangler secret put OPENAI_API_KEY
 wrangler deploy
 ```
 
-Copy the worker URL from the output: `https://bhagavad-gita-api.your-subdomain.workers.dev`
+Copy the worker URL from the output: `https://krishna-gpt-api.your-subdomain.workers.dev`
 
-### 5. Update Frontend
+### 5. Configure Runtime URL
 
-Edit `assets/js/guidance.js`:
+Set the deployed worker URL in `assets/js/guidance.js`:
 
 ```javascript
-const WORKER_URL = 'https://bhagavad-gita-api.your-subdomain.workers.dev';
+const WORKER_URL = 'https://krishna-gpt-api.your-subdomain.workers.dev';
 ```
 
 Commit and push:
@@ -70,7 +76,7 @@ git push
 
 ### 6. Test
 
-Visit your site's guidance page and ask a question. It should work without entering an API key.
+Visit your site's guidance page and ask a question. It should work without entering a user API key.
 
 ## Monitor Usage
 
@@ -97,7 +103,7 @@ const CORS_HEADERS = {
 };
 ```
 
-**API key errors:**
+**Secrets errors:**
 ```bash
 wrangler secret list           # Check if set
 wrangler secret put OPENAI_API_KEY  # Update
@@ -119,7 +125,14 @@ Test locally before deploying:
 
 ```bash
 # Create .dev.vars file
-echo "OPENAI_API_KEY=sk-..." > .dev.vars
+cat > .dev.vars <<'EOF'
+OPENAI_API_KEY=sk-...
+# Optional:
+# HF_TOKEN=hf_...
+# AWS_ACCESS_KEY_ID=...
+# AWS_SECRET_ACCESS_KEY=...
+# AWS_SESSION_TOKEN=...
+EOF
 
 # Start local server
 wrangler dev
@@ -127,7 +140,7 @@ wrangler dev
 # Test
 curl -X POST http://localhost:8787 \
   -H "Content-Type: application/json" \
-  -d '{"messages": [{"role": "user", "content": "Test"}]}'
+  -d '{"type":"chat_openai","messages":[{"role":"user","content":"Test"}]}'
 ```
 
 ## Update Worker

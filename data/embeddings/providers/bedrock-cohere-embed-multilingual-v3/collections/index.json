@@ -1,0 +1,17 @@
+{
+  "collections": [
+    {
+      "checksum": "0d0140e8f4303f0643acdb9b62162c0b9c7905242363d60d84e1e4216efbed99",
+      "collection": "bhagavad-gita",
+      "counts": {
+        "en": 11,
+        "hi": 11,
+        "total": 11
+      },
+      "dimensions": 1024,
+      "model": "cohere.embed-multilingual-v3",
+      "path": "bhagavad-gita.json",
+      "provider": "bedrock-cohere"
+    }
+  ]
+}

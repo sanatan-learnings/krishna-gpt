@@ -9,8 +9,48 @@ bhagavad-gita:
   author_hi: "भगवान कृष्ण"
   description_en: "The Song of God - 700 shlokas across 18 chapters"
   description_hi: "भगवान का गीत - 18 अध्यायों में 700 श्लोक"
-  permalink_base: "/bhagavad-gita/"
+  permalink_base: "/gita/"
+  landing_url: "/gita/"
   icon: "📖"
   subdirectory: "bhagavad-gita"
   total_verses: 700
   enabled: true
+
+uddhava-gita:
+  key: "uddhava-gita"
+  name_en: "Uddhava Gita"
+  name_hi: "उद्धव गीता"
+  author_en: "Bhagavan Krishna"
+  author_hi: "भगवान कृष्ण"
+  description_en: "Krishna's final teachings to Uddhava from the Bhagavata Purana"
+  description_hi: "भागवत पुराण में उद्धव के प्रति कृष्ण की अंतिम शिक्षाएं"
+  permalink_base: "/uddhava-gita/"
+  icon: "🦚"
+  subdirectory: "uddhava-gita"
+  enabled: false
+
+krishna-leela:
+  key: "krishna-leela"
+  name_en: "Krishna Leela"
+  name_hi: "कृष्ण लीला"
+  author_en: "Bhagavata Purana"
+  author_hi: "भागवत पुराण"
+  description_en: "Episodes that reveal Krishna's wisdom through lived examples"
+  description_hi: "कृष्ण की लीला से जीवन में उतरने वाली शिक्षाएं"
+  permalink_base: "/krishna-leela/"
+  icon: "✨"
+  subdirectory: "krishna-leela"
+  enabled: false
+
+krishna-niti:
+  key: "krishna-niti"
+  name_en: "Krishna Niti"
+  name_hi: "कृष्ण नीति"
+  author_en: "Mahabharata"
+  author_hi: "महाभारत"
+  description_en: "Practical counsel and strategic clarity from Krishna in Mahabharata"
+  description_hi: "महाभारत में कृष्ण के व्यावहारिक उपदेश और रणनीतिक स्पष्टता"
+  permalink_base: "/krishna-niti/"
+  icon: "⚔️"
+  subdirectory: "krishna-niti"
+  enabled: false

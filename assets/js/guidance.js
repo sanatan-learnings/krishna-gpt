@@ -1,12 +1,12 @@
 /**
- * Bhagavad Gita Spiritual Guidance - RAG System
+ * Krishna GPT Spiritual Guidance - RAG System
  *
  * This script implements a client-side RAG (Retrieval Augmented Generation) pipeline:
- * 1. Loads pre-generated embeddings for all verses
- * 2. Uses OpenAI text-embedding-3-small for query embeddings
+ * 1. Loads pre-generated embeddings across enabled collections
+ * 2. Uses provider-aware query embeddings (OpenAI/Bedrock/Hugging Face) + OpenAI chat
  * 3. Detects query language (English/Hindi)
  * 4. Performs semantic search using cosine similarity
- * 5. Sends relevant verses + query to GPT-4o for spiritual guidance
+ * 5. Sends relevant verses + query to GPT-4 for spiritual guidance
  * 6. Displays AI response with verse citations
  */
 
@@ -17,17 +17,143 @@ let conversationHistory = [];
 let isProcessing = false;
 
 // Configuration
-const BASE_URL = '/bhagavad-gita'; // GitHub Pages baseurl
-const EMBEDDING_MODEL = 'text-embedding-3-small';
-const GPT_MODEL = 'gpt-4o'; // Can change to 'gpt-4o-mini' for lower cost
+const BASE_URL = window.BASE_URL || ''; // GitHub Pages baseurl
 const TOP_K = 3; // Number of relevant verses to retrieve
 const MAX_TOKENS = 300;
 const TEMPERATURE = 0.7;
+const DEFAULT_EMBEDDINGS_INDEX_PATH = '/data/embeddings/providers/openai/collections/index.json';
+const EMBEDDINGS_CONFIG = (typeof window !== 'undefined' && window.EMBEDDINGS_CONFIG)
+    ? window.EMBEDDINGS_CONFIG
+    : {};
+const CHAT_CONFIG = (typeof window !== 'undefined' && window.CHAT_CONFIG)
+    ? window.CHAT_CONFIG
+    : {};
+const HF_API_TOKEN_STORAGE_KEY = 'kg_hf_token';
+const EMBEDDINGS_OVERRIDE_STORAGE_KEY = 'kg_embeddings_provider_override';
+const CHAT_OVERRIDE_STORAGE_KEY = 'kg_chat_provider_override';
+const PROVIDER_CONFIG_MAP = EMBEDDINGS_CONFIG.providers || {};
+const CHAT_PROVIDER_CONFIG_MAP = CHAT_CONFIG.providers || {};
+let runtimeEmbeddingsConfig = resolveRuntimeEmbeddingsConfig();
+let runtimeChatConfig = resolveRuntimeChatConfig();
 
 // Cloudflare Worker URL (set this after deploying your worker)
 // If set, the worker will be used and API key won't be required from users
-// Example: 'https://bhagavad-gita-api.your-subdomain.workers.dev'
-const WORKER_URL = 'https://bhagavad-gita-api.arungupta.workers.dev'; // Leave empty to use user-provided API key mode
+// Example: 'https://krishna-gpt-api.your-subdomain.workers.dev'
+const WORKER_URL = 'https://krishna-gpt-api.arungupta.workers.dev'; // Leave empty to use user-provided API key mode
+
+function resolveRuntimeEmbeddingsConfig() {
+    const baseProvider = EMBEDDINGS_CONFIG.provider || 'openai';
+    const overrideProvider = localStorage.getItem(EMBEDDINGS_OVERRIDE_STORAGE_KEY);
+    const provider = (overrideProvider && PROVIDER_CONFIG_MAP[overrideProvider]) ? overrideProvider : baseProvider;
+    const providerConfig = PROVIDER_CONFIG_MAP[provider] || {};
+
+    return {
+        provider,
+        model: providerConfig.model || EMBEDDINGS_CONFIG.model || 'text-embedding-3-small',
+        indexPath: providerConfig.index_path || EMBEDDINGS_CONFIG.indexPath || DEFAULT_EMBEDDINGS_INDEX_PATH
+    };
+}
+
+function getHuggingFaceApiUrl() {
+    return `https://router.huggingface.co/pipeline/feature-extraction/${encodeURIComponent(runtimeEmbeddingsConfig.model)}`;
+}
+
+function updateRuntimeBadge() {
+    const providerEl = document.getElementById('runtimeProviderLabel');
+    const modelEl = document.getElementById('runtimeModelLabel');
+    if (providerEl) providerEl.textContent = runtimeEmbeddingsConfig.provider;
+    if (modelEl) modelEl.textContent = runtimeEmbeddingsConfig.model;
+}
+
+function updateRuntimeChatBadge() {
+    const providerEl = document.getElementById('runtimeChatProviderLabel');
+    const modelEl = document.getElementById('runtimeChatModelLabel');
+    if (providerEl) providerEl.textContent = runtimeChatConfig.provider;
+    if (modelEl) modelEl.textContent = runtimeChatConfig.model;
+}
+
+function resolveRuntimeChatConfig() {
+    const baseProvider = CHAT_CONFIG.provider || 'openai';
+    const overrideProvider = localStorage.getItem(CHAT_OVERRIDE_STORAGE_KEY);
+    const provider = (overrideProvider && CHAT_PROVIDER_CONFIG_MAP[overrideProvider]) ? overrideProvider : baseProvider;
+    const providerConfig = CHAT_PROVIDER_CONFIG_MAP[provider] || {};
+
+    return {
+        provider,
+        model: providerConfig.model || CHAT_CONFIG.model || 'gpt-4o'
+    };
+}
+
+function showRuntimeConfigStatus(message, isError = false) {
+    const statusEl = document.getElementById('runtimeConfigStatus');
+    if (!statusEl) return;
+    statusEl.textContent = message;
+    statusEl.style.color = isError ? '#b42318' : '#666';
+    if (statusEl._clearTimer) {
+        clearTimeout(statusEl._clearTimer);
+    }
+    statusEl._clearTimer = setTimeout(() => {
+        statusEl.textContent = '';
+    }, isError ? 6000 : 2500);
+}
+
+function initRuntimeConfigPanel() {
+    const selectEl = document.getElementById('runtimeProviderSelect');
+    if (selectEl) {
+        selectEl.value = runtimeEmbeddingsConfig.provider;
+    }
+
+    const chatSelectEl = document.getElementById('runtimeChatProviderSelect');
+    if (chatSelectEl) {
+        chatSelectEl.value = runtimeChatConfig.provider;
+    }
+    updateRuntimeBadge();
+    updateRuntimeChatBadge();
+}
+
+async function applyRuntimeProviderSelection() {
+    const selectEl = document.getElementById('runtimeProviderSelect');
+    if (!selectEl) return;
+
+    const nextProvider = selectEl.value;
+    const nextConfig = PROVIDER_CONFIG_MAP[nextProvider];
+    if (!nextConfig) {
+        showRuntimeConfigStatus(`Unknown provider: ${nextProvider}`, true);
+        return;
+    }
+
+    runtimeEmbeddingsConfig = {
+        provider: nextProvider,
+        model: nextConfig.model,
+        indexPath: nextConfig.index_path || DEFAULT_EMBEDDINGS_INDEX_PATH
+    };
+
+    localStorage.setItem(EMBEDDINGS_OVERRIDE_STORAGE_KEY, nextProvider);
+    updateRuntimeBadge();
+    showRuntimeConfigStatus('Reloading embeddings...');
+    await loadEmbeddings();
+}
+
+function applyRuntimeChatProviderSelection() {
+    const selectEl = document.getElementById('runtimeChatProviderSelect');
+    if (!selectEl) return;
+
+    const nextProvider = selectEl.value;
+    const nextConfig = CHAT_PROVIDER_CONFIG_MAP[nextProvider];
+    if (!nextConfig) {
+        showRuntimeConfigStatus(`Unknown chat provider: ${nextProvider}`, true);
+        return;
+    }
+
+    runtimeChatConfig = {
+        provider: nextProvider,
+        model: nextConfig.model || 'gpt-4o'
+    };
+
+    localStorage.setItem(CHAT_OVERRIDE_STORAGE_KEY, nextProvider);
+    updateRuntimeChatBadge();
+    showRuntimeConfigStatus('Chat provider updated');
+}
 
 /**
  * Initialize the guidance system on page load
@@ -54,6 +180,7 @@ function initGuidanceSystem() {
 
     // Set up event listeners
     setupEventListeners();
+    initRuntimeConfigPanel();
 
     // Update placeholders based on language
     updatePlaceholders();
@@ -69,19 +196,134 @@ function initGuidanceSystem() {
 }
 
 /**
- * Load embeddings.json file
+ * Infer collection key from URL path for backward compatibility.
+ */
+function inferCollectionFromUrl(url = '') {
+    const segment = url.replace(/^\/+/, '').split('/')[0];
+    const mapping = {
+        'gita': 'bhagavad-gita',
+        'uddhava-gita': 'uddhava-gita',
+        'krishna-leela': 'krishna-leela',
+        'krishna-niti': 'krishna-niti'
+    };
+    return mapping[segment] || segment || null;
+}
+
+/**
+ * Normalize verse records so collection metadata is always available.
+ */
+function normalizeVerse(verse, fallbackCollection = null) {
+    return {
+        ...verse,
+        collection: verse.collection || fallbackCollection || inferCollectionFromUrl(verse.url)
+    };
+}
+
+/**
+ * Merge a single embeddings payload into aggregated structure.
+ */
+function mergeEmbeddingsPayload(target, payload, fallbackCollection = null) {
+    if (!payload?.verses) return;
+    ['en', 'hi'].forEach(lang => {
+        const verses = payload.verses[lang] || [];
+        verses.forEach(verse => {
+            target.verses[lang].push(normalizeVerse(verse, fallbackCollection));
+        });
+    });
+}
+
+/**
+ * Build absolute fetch path from configured index path.
+ */
+function resolveAssetPath(path) {
+    if (!path) return `${BASE_URL}${DEFAULT_EMBEDDINGS_INDEX_PATH}`;
+    if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    if (BASE_URL && path.startsWith(`${BASE_URL}/`)) return path;
+    return `${BASE_URL}${path}`;
+}
+
+/**
+ * Validate loaded embeddings against active runtime config.
+ */
+function validateEmbeddingsCompatibility(payload) {
+    const expectedProvider = runtimeEmbeddingsConfig.provider;
+    const expectedModel = runtimeEmbeddingsConfig.model;
+
+    if (expectedProvider && payload.provider && payload.provider !== expectedProvider) {
+        throw new Error(`Embeddings provider mismatch: expected ${expectedProvider}, got ${payload.provider}`);
+    }
+    if (expectedModel && payload.model && payload.model !== expectedModel) {
+        throw new Error(`Embeddings model mismatch: expected ${expectedModel}, got ${payload.model}`);
+    }
+}
+
+/**
+ * Load embeddings from per-collection manifest and files.
+ */
+async function loadEmbeddingsFromManifest(indexPath) {
+    const manifestUrl = resolveAssetPath(indexPath);
+    const manifestResponse = await fetch(manifestUrl);
+    if (!manifestResponse.ok) {
+        throw new Error(`Manifest HTTP ${manifestResponse.status}`);
+    }
+
+    const manifest = await manifestResponse.json();
+    const files = Array.isArray(manifest?.files) ? manifest.files : [];
+    const collections = Array.isArray(manifest?.collections) ? manifest.collections : [];
+    if (files.length === 0 && collections.length === 0) {
+        throw new Error('Embeddings manifest has no files');
+    }
+
+    const manifestBasePath = manifestUrl.substring(0, manifestUrl.lastIndexOf('/') + 1);
+    const entries = files.length > 0
+        ? files
+        : collections.map(entry => ({
+            collection: entry.collection,
+            provider: entry.provider,
+            model: entry.model,
+            dimensions: entry.dimensions,
+            path: entry.path?.startsWith('/')
+                ? entry.path
+                : `${manifestBasePath}${entry.path || ''}`
+        }));
+
+    const payloads = await Promise.all(entries.map(async (entry) => {
+        const response = await fetch(resolveAssetPath(entry.path));
+        if (!response.ok) {
+            throw new Error(`Embeddings file HTTP ${response.status}: ${entry.path}`);
+        }
+        const data = await response.json();
+        return { entry, data };
+    }));
+
+    const merged = {
+        model: payloads[0].data.model,
+        dimensions: payloads[0].data.dimensions,
+        provider: payloads[0].data.provider,
+        generated_at: payloads[0].data.generated_at,
+        verses: { en: [], hi: [] }
+    };
+
+    payloads.forEach(({ entry, data }) => {
+        mergeEmbeddingsPayload(merged, data, entry.collection || data.collection || null);
+    });
+    validateEmbeddingsCompatibility(merged);
+
+    return merged;
+}
+
+/**
+ * Load embeddings data from per-collection manifest/files.
  */
 async function loadEmbeddings() {
     try {
-        const response = await fetch(`${BASE_URL}/data/embeddings.json`);
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        embeddingsData = await response.json();
-        console.log(`Loaded embeddings: ${embeddingsData.verses.en.length} English + ${embeddingsData.verses.hi.length} Hindi verses`);
-        console.log(`Embedding model: ${embeddingsData.model}, dimensions: ${embeddingsData.dimensions}`);
+        embeddingsData = await loadEmbeddingsFromManifest(runtimeEmbeddingsConfig.indexPath);
+        console.log(`Loaded per-collection embeddings: ${embeddingsData.verses.en.length} English + ${embeddingsData.verses.hi.length} Hindi verses`);
+        showRuntimeConfigStatus('Embeddings loaded');
     } catch (error) {
         console.error('Error loading embeddings:', error);
+        embeddingsData = null;
+        showRuntimeConfigStatus(`Failed to load embeddings: ${error.message}`, true);
         showError('Failed to load verse embeddings. Please refresh the page.');
     }
 }
@@ -90,7 +332,7 @@ async function loadEmbeddings() {
  * Initialize API key from localStorage
  */
 function initApiKey() {
-    apiKey = localStorage.getItem('bg_openai_key');
+    apiKey = localStorage.getItem('kg_openai_key') || localStorage.getItem('bg_openai_key');
     if (apiKey) {
         showApiKeySetStatus();
     } else {
@@ -148,6 +390,28 @@ function setupEventListeners() {
             saveApiKey();
         }
     });
+
+    document.getElementById('toggleRuntimeConfig')?.addEventListener('click', () => {
+        const body = document.getElementById('runtimeConfigBody');
+        if (!body) return;
+        body.style.display = body.style.display === 'none' ? 'flex' : 'none';
+    });
+
+    document.getElementById('applyRuntimeProvider')?.addEventListener('click', async () => {
+        await applyRuntimeProviderSelection();
+    });
+
+    document.getElementById('runtimeProviderSelect')?.addEventListener('change', async () => {
+        await applyRuntimeProviderSelection();
+    });
+
+    document.getElementById('applyRuntimeChatProvider')?.addEventListener('click', () => {
+        applyRuntimeChatProviderSelection();
+    });
+
+    document.getElementById('runtimeChatProviderSelect')?.addEventListener('change', () => {
+        applyRuntimeChatProviderSelection();
+    });
 }
 
 /**
@@ -168,7 +432,7 @@ function saveApiKey() {
     }
 
     apiKey = key;
-    localStorage.setItem('bg_openai_key', key);
+    localStorage.setItem('kg_openai_key', key);
     input.value = '';
     showApiKeySetStatus();
 
@@ -245,34 +509,188 @@ function cosineSimilarity(vecA, vecB) {
 }
 
 /**
- * Get embedding for user query from OpenAI API
+ * Mean-pool token vectors from Hugging Face feature extraction output.
  */
-async function getQueryEmbedding(query) {
-    try {
-        const response = await fetch('https://api.openai.com/v1/embeddings', {
+function meanPoolVectors(vectors) {
+    if (!Array.isArray(vectors) || vectors.length === 0) {
+        return [];
+    }
+
+    if (!Array.isArray(vectors[0])) {
+        return vectors;
+    }
+
+    const dims = vectors[0].length;
+    const pooled = new Array(dims).fill(0);
+    vectors.forEach((tokenVector) => {
+        for (let i = 0; i < dims; i++) {
+            pooled[i] += tokenVector[i];
+        }
+    });
+    return pooled.map((value) => value / vectors.length);
+}
+
+/**
+ * Get embedding for user query from OpenAI embeddings endpoint.
+ */
+async function getOpenAIQueryEmbedding(query) {
+    const requestBody = {
+        model: runtimeEmbeddingsConfig.model,
+        input: query
+    };
+
+    let response;
+    if (WORKER_URL) {
+        response = await fetch(WORKER_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type: 'embeddings',
+                ...requestBody
+            })
+        });
+    } else {
+        if (!apiKey) {
+            throw new Error('OpenAI API key required for query embeddings');
+        }
+        response = await fetch('https://api.openai.com/v1/embeddings', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json'
             },
+            body: JSON.stringify(requestBody)
+        });
+    }
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error?.message || `OpenAI embedding HTTP ${response.status}`);
+    }
+    const data = await response.json();
+    return data?.data?.[0]?.embedding || null;
+}
+
+/**
+ * Get embedding for user query from Hugging Face inference endpoint.
+ */
+async function getHuggingFaceQueryEmbedding(query) {
+    if (WORKER_URL) {
+        const response = await fetch(WORKER_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
-                model: EMBEDDING_MODEL,
+                type: 'hf_embeddings',
+                model: runtimeEmbeddingsConfig.model,
                 input: query
             })
         });
 
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error?.message || `HTTP ${response.status}`);
+            let message = `HuggingFace embedding HTTP ${response.status}`;
+            try {
+                const error = await response.json();
+                message = error?.error?.message || message;
+            } catch (_) {
+                // keep generic status fallback
+            }
+            throw new Error(message);
         }
 
-        const data = await response.json();
-        return data.data[0].embedding;
-    } catch (error) {
-        console.error('Error getting query embedding:', error);
-        // Fall back to keyword search
-        return null;
+        const payload = await response.json();
+        if (!Array.isArray(payload)) {
+            throw new Error('HuggingFace embedding response is not an array');
+        }
+        return meanPoolVectors(payload);
     }
+
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    const token = localStorage.getItem(HF_API_TOKEN_STORAGE_KEY);
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(getHuggingFaceApiUrl(), {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+            inputs: query,
+            options: { wait_for_model: true }
+        })
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HuggingFace embedding HTTP ${response.status}: ${errorText}`);
+    }
+
+    const payload = await response.json();
+    if (!Array.isArray(payload)) {
+        throw new Error('HuggingFace embedding response is not an array');
+    }
+    return meanPoolVectors(payload);
+}
+
+/**
+ * Get query embedding based on active runtime embeddings provider.
+ */
+async function getQueryEmbedding(query) {
+    if (runtimeEmbeddingsConfig.provider === 'openai') {
+        return getOpenAIQueryEmbedding(query);
+    }
+    if (runtimeEmbeddingsConfig.provider === 'bedrock-cohere') {
+        return getBedrockQueryEmbedding(query);
+    }
+    if (runtimeEmbeddingsConfig.provider === 'huggingface') {
+        return getHuggingFaceQueryEmbedding(query);
+    }
+
+    return null;
+}
+
+/**
+ * Get embedding for user query from Bedrock (via worker only).
+ */
+async function getBedrockQueryEmbedding(query) {
+    if (!WORKER_URL) {
+        throw new Error('Bedrock embeddings require WORKER_URL runtime proxy');
+    }
+
+    const response = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            type: 'bedrock_embeddings',
+            model: runtimeEmbeddingsConfig.model,
+            input: query
+        })
+    });
+
+    if (!response.ok) {
+        let message = `Bedrock embedding HTTP ${response.status}`;
+        try {
+            const error = await response.json();
+            message = error?.error?.message || message;
+        } catch (_) {
+            // keep status-based fallback
+        }
+        throw new Error(message);
+    }
+
+    const payload = await response.json();
+    const embedding = payload?.embedding;
+    if (!Array.isArray(embedding)) {
+        throw new Error('Bedrock embedding response missing embedding array');
+    }
+    return embedding;
 }
 
 /**
@@ -289,9 +707,9 @@ function findRelevantVersesByKeywords(query, lang, k = TOP_K) {
         let score = 0;
         const searchText = (
             verse.title + ' ' +
-            (verse.metadata.transliteration || '') + ' ' +
-            (verse.metadata.translation || '') + ' ' +
-            (verse.metadata.devanagari || '')
+            verse.metadata.transliteration + ' ' +
+            verse.metadata.literal_translation + ' ' +
+            verse.metadata.devanagari
         ).toLowerCase();
 
         // Count keyword matches
@@ -312,14 +730,46 @@ function findRelevantVersesByKeywords(query, lang, k = TOP_K) {
     // Sort by score and take top-K
     scored.sort((a, b) => b.similarity - a.similarity);
 
-    // If no matches, return first K verses as default
-    const topScored = scored.slice(0, k);
-    if (topScored[0].similarity === 0) {
-        console.log('No keyword matches found, using first verses as default');
-        return verses.slice(0, k);
+    // Diversify results across collections to avoid over-clustering on one text.
+    const topScored = diversifyByCollection(scored, k);
+
+    // If no matches, keep diversified default selection.
+    if (topScored[0] && topScored[0].similarity === 0) {
+        console.log('No keyword matches found, using diversified verses as default');
     }
 
     return topScored;
+}
+
+/**
+ * Diversify top results so multiple collections are represented.
+ * Keeps per-collection rank order while selecting in round-robin.
+ */
+function diversifyByCollection(scoredVerses, k) {
+    const grouped = new Map();
+
+    scoredVerses.forEach(verse => {
+        const collection = verse.collection || inferCollectionFromUrl(verse.url) || 'unknown';
+        if (!grouped.has(collection)) {
+            grouped.set(collection, []);
+        }
+        grouped.get(collection).push(verse);
+    });
+
+    const result = [];
+    let addedInPass = true;
+
+    while (result.length < k && addedInPass) {
+        addedInPass = false;
+        for (const bucket of grouped.values()) {
+            if (bucket.length > 0 && result.length < k) {
+                result.push(bucket.shift());
+                addedInPass = true;
+            }
+        }
+    }
+
+    return result;
 }
 
 /**
@@ -339,10 +789,9 @@ function findRelevantVerses(queryEmbedding, lang, k = TOP_K) {
         similarity: cosineSimilarity(queryEmbedding, verse.embedding)
     }));
 
-    // Sort by similarity (highest first) and take top-K
+    // Sort by similarity (highest first) and diversify by collection.
     scored.sort((a, b) => b.similarity - a.similarity);
-
-    return scored.slice(0, k);
+    return diversifyByCollection(scored, k);
 }
 
 /**
@@ -350,20 +799,20 @@ function findRelevantVerses(queryEmbedding, lang, k = TOP_K) {
  */
 function buildSystemPrompt(verses, lang) {
     const intro = lang === 'hi'
-        ? 'आप भगवद् गीता के विशेषज्ञ आध्यात्मिक मार्गदर्शक हैं। उपयोगकर्ता के प्रश्न का उत्तर देने के लिए प्रासंगिक श्लोकों का उपयोग करें। अपनी प्रतिक्रिया में विशिष्ट श्लोकों का संदर्भ दें और व्यावहारिक आध्यात्मिक मार्गदर्शन प्रदान करें। श्री कृष्ण की शिक्षाओं के आधार पर गहन और विचारशील उत्तर दें।'
-        : 'You are a spiritual guide specializing in the Bhagavad Gita. Use the relevant verses below to answer the user\'s question. Cite specific verses in your response and provide practical spiritual guidance based on Lord Krishna\'s teachings. Be profound, thoughtful, and help apply ancient wisdom to modern life.';
+        ? 'आप श्रीकृष्ण की शिक्षाओं के विशेषज्ञ आध्यात्मिक मार्गदर्शक हैं। उपयोगकर्ता के प्रश्न का उत्तर देने के लिए नीचे दिए गए प्रासंगिक श्लोकों का उपयोग करें। अपनी प्रतिक्रिया में विशिष्ट श्लोकों का उल्लेख करें और व्यावहारिक आध्यात्मिक मार्गदर्शन दें।'
+        : 'You are a spiritual guide specializing in Sri Krishna\'s teachings across sacred texts. Use the relevant verses below to answer the user\'s question. Cite specific verses in your response and provide practical spiritual guidance.';
 
     const versesContext = verses.map((v, i) => {
-        const header = lang === 'hi' ? `श्लोक ${i + 1}:` : `Verse ${i + 1}:`;
-        const chapter = v.chapter ? `Chapter ${v.chapter}, Verse ${v.verse}` : v.title;
-        return `${header} ${chapter}\n${v.metadata.devanagari || ''}\n${v.metadata.transliteration || ''}\n${v.metadata.translation || ''}`;
+        const header = lang === 'hi' ? `छंद ${i + 1}:` : `Verse ${i + 1}:`;
+        const collection = v.collection ? ` (${v.collection})` : '';
+        return `${header} ${v.title}${collection}\n${v.metadata.transliteration}\n${v.metadata.literal_translation}`;
     }).join('\n\n');
 
     const format = lang === 'hi'
-        ? '\n\nअपनी प्रतिक्रिया को इस प्रकार संरचित करें:\n1. सार: मुख्य संदेश (2-3 वाक्य)\n2. व्यावहारिक कार्य: 2-3 विशिष्ट, कार्रवाई योग्य चरण\n3. श्लोक संदर्भ: कौन से श्लोक लागू होते हैं और क्यों\n\nसंक्षिप्त रहें - कुल 150 शब्दों से कम।'
+        ? '\n\nअपनी प्रतिक्रिया को इस प्रकार संरचित करें:\n1. सार: मुख्य संदेश (2-3 वाक्य)\n2. व्यावहारिक कार्य: 2-3 विशिष्ट, कार्रवाई योग्य चरण\n3. छंद संदर्भ: कौन से छंद लागू होते हैं और क्यों\n\nसंक्षिप्त रहें - कुल 150 शब्दों से कम।'
         : '\n\nStructure your response as follows:\n1. **Key Insight**: Main message in 2-3 sentences\n2. **Actionable Practices**: 2-3 specific, practical steps the person can take\n3. **Verse References**: Which verses apply and why\n\nKeep it concise - under 150 words total.';
 
-    return `${intro}\n\nRelevant Verses from Bhagavad Gita:\n\n${versesContext}${format}`;
+    return `${intro}\n\nRelevant Verses:\n\n${versesContext}${format}`;
 }
 
 /**
@@ -380,10 +829,11 @@ async function getGuidance(query, verses, lang) {
         ];
 
         const requestBody = {
-            model: GPT_MODEL,
+            model: runtimeChatConfig.model,
             messages: messages,
             temperature: TEMPERATURE,
-            max_tokens: MAX_TOKENS
+            max_tokens: MAX_TOKENS,
+            type: runtimeChatConfig.provider === 'openai' ? 'chat_openai' : `chat_${runtimeChatConfig.provider}`
         };
 
         let response;
@@ -399,15 +849,19 @@ async function getGuidance(query, verses, lang) {
                 body: JSON.stringify(requestBody)
             });
         } else {
+            if (runtimeChatConfig.provider !== 'openai') {
+                throw new Error(`Direct mode supports only OpenAI chat provider, got: ${runtimeChatConfig.provider}`);
+            }
             // Use direct OpenAI API (requires user's API key)
             console.log('Calling OpenAI API directly');
+            const { type, ...openAIRequestBody } = requestBody;
             response = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${apiKey}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify(openAIRequestBody)
             });
         }
 
@@ -488,22 +942,34 @@ async function handleSendQuery() {
         const queryLang = detectLanguage(query);
         console.log(`Query language: ${queryLang}`);
 
-        // Step 2: Get query embedding for semantic search
-        console.log('Generating query embedding...');
-        const queryEmbedding = await getQueryEmbedding(query);
+        // Step 2: Store query for fallback search
+        embeddingsData.lastQuery = query;
 
-        // Step 3: Find relevant verses (semantic search if embedding available, else keyword)
+        // Step 3: Generate query embedding and run retrieval
+        console.log(`Generating query embedding via ${runtimeEmbeddingsConfig.provider}/${runtimeEmbeddingsConfig.model}...`);
+        let queryEmbedding = null;
+        try {
+            queryEmbedding = await getQueryEmbedding(query);
+        } catch (embeddingError) {
+            const mustUseEmbeddings = runtimeEmbeddingsConfig.provider === 'bedrock-cohere';
+            if (mustUseEmbeddings) {
+                throw new Error(`Bedrock embeddings unavailable: ${embeddingError.message}`);
+            }
+            // Keep guidance available for non-Bedrock providers if live embedding lookup fails.
+            console.warn('Query embedding failed, falling back to keyword retrieval:', embeddingError);
+        }
         let relevantVerses;
         if (queryEmbedding) {
-            console.log('Finding relevant verses using semantic search...');
+            console.log('Finding relevant verses using semantic similarity...');
             relevantVerses = findRelevantVerses(queryEmbedding, queryLang, TOP_K);
-            console.log(`Found ${relevantVerses.length} relevant verses:`, relevantVerses.map(v => v.title));
         } else {
-            console.log('Falling back to keyword search...');
-            embeddingsData.lastQuery = query;
+            if (runtimeEmbeddingsConfig.provider === 'bedrock-cohere') {
+                throw new Error('Bedrock embeddings unavailable: query embedding is empty');
+            }
+            console.log('No query embedding available for active provider; using keyword fallback.');
             relevantVerses = findRelevantVersesByKeywords(query, queryLang, TOP_K);
-            console.log(`Found ${relevantVerses.length} relevant verses:`, relevantVerses.map(v => v.title));
         }
+        console.log(`Found ${relevantVerses.length} relevant verses:`, relevantVerses.map(v => v.title));
 
         // Step 4: Get GPT guidance
         console.log('Getting spiritual guidance...');
@@ -615,10 +1081,24 @@ function addMessage(role, content, verses = null) {
             const card = document.createElement('div');
             card.className = 'citation-card';
 
+            const titleContainer = document.createElement('div');
+            titleContainer.className = 'citation-title-container';
+
             const link = document.createElement('a');
             link.href = BASE_URL + verse.url + (verse.url.includes('?') ? '&' : '?') + 'lang=' + lang;
             link.textContent = verse.title;
-            card.appendChild(link);
+            titleContainer.appendChild(link);
+
+            // Add collection badge if present
+            const collectionName = verse.metadata?.collection_name || verse.metadata?.collection_key || verse.collection;
+            if (collectionName) {
+                const badge = document.createElement('span');
+                badge.className = 'collection-badge';
+                badge.textContent = collectionName;
+                titleContainer.appendChild(badge);
+            }
+
+            card.appendChild(titleContainer);
 
             if (verse.metadata.devanagari) {
                 const devanagari = document.createElement('div');

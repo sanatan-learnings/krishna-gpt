@@ -31,7 +31,9 @@ verse-generate --collection bhagavad-gita --verse 9 --verse-id chapter-01-shloka
 
 **Generate embeddings:**
 ```bash
-verse-embeddings --multi-collection
+verse-embeddings --multi-collection \
+  --collections-file _data/collections.yml \
+  --output-dir data/embeddings/providers/openai/collections
 ```
 
 See [sanatan-verse-sdk](https://github.com/sanatan-learnings/sanatan-verse-sdk) for full documentation.

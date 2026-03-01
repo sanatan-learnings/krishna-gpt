@@ -2,7 +2,7 @@
 # This deploys ONLY the worker script, not the entire site.
 # Your Jekyll site stays on GitHub Pages.
 
-name = "bhagavad-gita-api"
+name = "krishna-gpt-api"
 main = "workers/cloudflare-worker.js"
 compatibility_date = "2026-01-29"
 
@@ -13,11 +13,15 @@ workers_dev = true
 # https://dash.cloudflare.com/ > Workers & Pages > Overview
 account_id = "af86ad0762a15106eea3a63829d709eb"
 
-# Secrets (DO NOT set actual values here)
-# Set via: wrangler secret put OPENAI_API_KEY
-# The OPENAI_API_KEY will be prompted during deployment
+# Secrets (set via `wrangler secret put`, not in this file):
+# OPENAI_API_KEY         -> OpenAI chat + OpenAI embeddings
+# HF_TOKEN               -> Hugging Face embeddings
+# AWS_ACCESS_KEY_ID      -> Bedrock embeddings
+# AWS_SECRET_ACCESS_KEY  -> Bedrock embeddings
+# AWS_SESSION_TOKEN      -> Optional for temporary IAM credentials
 
-# Local development
-# For testing locally: wrangler dev
+# Local development: wrangler dev
 [vars]
-# Non-secret variables can go here
+AWS_REGION = "us-east-1"
+BEDROCK_EMBEDDING_MODEL = "cohere.embed-multilingual-v3"
+ALLOWED_ORIGINS = "https://sanatan-learnings.github.io,http://localhost:4000,http://127.0.0.1:4000"

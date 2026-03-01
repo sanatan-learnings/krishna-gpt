@@ -5,7 +5,7 @@ title_en: 'Chapter 47: Duty and Detachment from Results'
 title_hi: 'Chapter 47: कर्तव्य और फल से विरक्ति'
 chapter: 2
 verse_number: 47
-previous_shloka: /verses/chapter-01-shloka-07/
+previous_shloka: /gita/chapter-01-shloka-07/
 chapter_info:
   number: 2
   name_en: The Yoga of Knowledge
@@ -81,7 +81,7 @@ practical_application:
     hi: जब किसी को कर्तव्य के महत्व और अपने कर्मों के परिणामों से विरक्ति की आवश्यकता
       की याद दिलाने की जरूरत होती है, तब इस श्लोक का उच्चारण या उपयोग किया जा सकता
       है।
-permalink: /bhagavad-gita/chapter-02-shloka-47/
+permalink: /gita/chapter-02-shloka-47/
 verse_type: chapter
 meaning: Your right is to perform your duties, but you are not entitled to the fruits
   of your actions. Never consider yourself the cause of the results of your actions,

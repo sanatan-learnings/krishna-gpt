@@ -9,8 +9,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.title }} | {{ site.title }}</title>
     <meta name="description" content="{{ page.description | default: site.description }}">
-    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <link rel="icon" type="image/svg+xml" href="{{ '/assets/favicon.svg' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/krishna.css' | relative_url }}">
     {% seo %}
+    <script>
+        window.BASE_URL = "{{ site.baseurl | default: '' }}";
+    </script>
 </head>
 <body>
     <header>
@@ -22,8 +26,8 @@
                         <span data-lang="hi">{{ t_hi.site_title }}</span>
                     </a></h1>
                     <p class="subtitle">
-                        <span data-lang="en">🕉️ Krishna's Teaching 📖</span>
-                        <span data-lang="hi">🕉️ श्रीकृष्ण का उपदेश 📖</span>
+                        <span data-lang="en">🦚 Sri Krishna's Teachings</span>
+                        <span data-lang="hi">🦚 श्रीकृष्ण की शिक्षाएं</span>
                     </p>
                 </div>
                 <div class="header-controls">
@@ -61,11 +65,11 @@
     <footer>
         <div class="container">
             <p>
-                <span data-lang="en">🙏 May the wisdom of the Gita illuminate your path</span>
-                <span data-lang="hi">🙏 गीता का ज्ञान आपके मार्ग को प्रकाशित करे</span>
+                <span data-lang="en">🙏 May Sri Krishna's wisdom illuminate your path</span>
+                <span data-lang="hi">🙏 श्रीकृष्ण का ज्ञान आपके मार्ग को प्रकाशित करे</span>
             </p>
             <p class="footer-links">
-                <a href="https://github.com/sanatan-learnings/bhagavad-gita" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/sanatan-learnings/krishna-gpt" target="_blank" rel="noopener noreferrer">
                     <span data-lang="en">{{ t_en.contribute }}</span>
                     <span data-lang="hi">{{ t_hi.contribute }}</span>
                 </a>

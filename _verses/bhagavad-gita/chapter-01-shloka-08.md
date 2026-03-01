@@ -1,13 +1,13 @@
 ---
 layout: verse
 collection_key: bhagavad-gita
-permalink: /bhagavad-gita/chapter-01-shloka-08/
+permalink: /gita/chapter-01-shloka-08/
 title_en: 'Chapter 8: The Mighty Warriors of Kaurava'
 title_hi: 'Chapter 8: कौरवों के शूरवीर योद्धा'
 chapter: 1
 verse_number: 8
 verse_type: chapter
-previous_verse: /bhagavad-gita/chapter-01-shloka-07/
+previous_verse: /gita/chapter-01-shloka-07/
 image: /images/bhagavad-gita/modern-minimalist/chapter-01-shloka-08.png
 devanagari: भवान्भीष्मश्च कर्णश्च कृपश्च समितिञ्जयः। अश्वत्थामा विकर्णश्च सौमदत्तिस्तथैव
   च ॥ १-८॥
@@ -98,5 +98,5 @@ meaning: The verse lists some of the prominent warriors on the Kaurava side in t
 translation:
   en: You, Bhishma, Karna, Krpa, the victorious in battle, Ashvatthama, Vikarna, and
     also the son of Somadatta.
-next_verse: /bhagavad-gita/chapter-01-shloka-09/
+next_verse: /gita/chapter-01-shloka-09/
 ---

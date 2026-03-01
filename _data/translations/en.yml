@@ -1,9 +1,9 @@
 # English translations for UI strings
-site_title: "Bhagavad Gita: A Comprehensive Guide"
-site_description: "An interactive guide to the Bhagavad Gita with shloka-by-shloka analysis"
+site_title: "Krishna GPT: Lessons from Sri Krishna"
+site_description: "An interactive guide to Krishna's teachings across sacred texts, starting with the Bhagavad Gita"
 
 # Navigation
-home: "Home"
+home_nav: "Home"
 guidance: "Spiritual Guidance"
 search_nav: "Search"
 book: "Book Generator"
@@ -48,7 +48,7 @@ guidance: "Spiritual Guidance"
 # Guidance page
 guidance_page:
   title: "Spiritual Guidance"
-  subtitle: "Ask questions about the Bhagavad Gita teachings"
+  subtitle: "Ask questions about Krishna's teachings"
   input_placeholder: "e.g., How do I overcome anxiety and fear?"
   api_key_prompt: "OpenAI API Key Required"
   api_key_placeholder: "Enter your OpenAI API key (sk-...)"
@@ -63,8 +63,8 @@ guidance_page:
 
 # Search page
 search:
-  title: "Search the Gita"
-  subtitle: "Search across all shlokas, translations, and meanings"
+  title: "Search the Teachings"
+  subtitle: "Search across all available collections, translations, and meanings"
   placeholder: "Search shlokas, translations, meanings..."
   clear: "Clear"
   prompt: "Enter a keyword or phrase to search"
@@ -84,6 +84,33 @@ custom_header: "Custom Header"
 custom_footer: "Custom Footer"
 generate: "Generate Book"
 print: "Print"
+
+# Home
+home:
+  title: "Krishna GPT"
+  subtitle: "Timeless lessons from Sri Krishna"
+  description: "Explore Krishna's teachings across multiple collections. The Bhagavad Gita is the first and most complete collection."
+  start_gita: "Start with the Gita"
+  ask_krishna: "Ask Krishna"
+  search_all: "Search All"
+  about_title: "About Krishna GPT"
+  about_p1: "Krishna GPT brings together the teachings of Sri Krishna across major sources, with careful translations, practical guidance, and contextual explanations."
+  about_p2: "The Bhagavad Gita is the foundation of this project, and more Krishna-centric collections will be added over time."
+
+# Collections
+collections:
+  title: "Collections"
+  coming_soon: "Coming Soon"
+  subtitle: "More Krishna-centric teachings are in preparation"
+
+# Gita page
+gita_page:
+  title: "Bhagavad Gita"
+  subtitle: "Shloka-by-shloka guidance from Krishna's dialogue with Arjuna"
+  about_title: "About the Bhagavad Gita"
+  about_p1: "The Bhagavad Gita is a 700-shloka Hindu scripture that is part of the epic Mahabharata. It is a sacred dialogue between Lord Krishna and the warrior Arjuna on the battlefield of Kurukshetra."
+  about_p2: "This guide includes shloka-by-shloka analysis with Sanskrit text, transliteration, translations, interpretive meaning, and practical application."
+  full_text: "Read Full Gita"
 
 # Chapter titles
 chapter_1: "Arjuna's Dilemma"

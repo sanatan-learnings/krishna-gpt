@@ -1,13 +1,13 @@
 ---
 layout: verse
 collection_key: bhagavad-gita
-permalink: /bhagavad-gita/chapter-01-shloka-10/
+permalink: /gita/chapter-01-shloka-10/
 title_en: 'Chapter 10: Strength Comparison of Armies'
 title_hi: 'Chapter 10: सेनाओं की शक्ति की तुलना'
 chapter: 1
 verse_number: 10
 verse_type: chapter
-previous_verse: /bhagavad-gita/chapter-01-shloka-09/
+previous_verse: /gita/chapter-01-shloka-09/
 image: /images/bhagavad-gita/modern-minimalist/chapter-01-shloka-10.png
 devanagari: अपर्याप्तं तदस्माकं बलं भीष्माभिरक्षितम्। पर्याप्तं त्विदमेतेषां बलं भीमाभिरक्षितम्
   ॥ १-१०॥
