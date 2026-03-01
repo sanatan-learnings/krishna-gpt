@@ -1,0 +1,10 @@
+# Project-level configuration for sanatan-verse-sdk
+# These defaults apply to all collections unless overridden at the collection level.
+
+defaults:
+  # subject: Hanuman        # primary deity / subject of this project
+  # subject_type: deity     # deity | avatar | concept | figure
+
+  # subject and subject_type are used by verse-puranic-context to filter
+  # RAG retrieval to episodes where the subject is a direct participant.
+  # Collections can override by setting subject / subject_type in collections.yml.

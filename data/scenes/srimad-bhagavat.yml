@@ -1,0 +1,23 @@
+_meta:
+  collection: srimad-bhagavat
+  description: Scene descriptions for Srimad Bhagavat image generation
+
+# Scene descriptions for each verse.
+# Be specific and concrete - describe what should be visible in the image.
+# Include: setting, characters, poses, lighting, mood, and visual elements.
+
+scenes:
+  verse-01:
+    title: "[Brief title for verse 1]"
+    description: |
+      [Add scene description for verse 1]
+
+  verse-02:
+    title: "[Brief title for verse 2]"
+    description: |
+      [Add scene description for verse 2]
+
+  verse-03:
+    title: "[Brief title for verse 3]"
+    description: |
+      [Add scene description for verse 3]

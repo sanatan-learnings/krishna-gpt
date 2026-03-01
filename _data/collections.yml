@@ -54,3 +54,18 @@ krishna-niti:
   icon: "⚔️"
   subdirectory: "krishna-niti"
   enabled: false
+
+srimad-bhagavat:
+  key: "srimad-bhagavat"
+  name_en: "Srimad Bhagavat"
+  name_hi: "श्रीमद्भागवत"
+  author_en: "Veda Vyasa"
+  author_hi: "वेद व्यास"
+  description_en: "Bhagavata Purana teachings, stories, and devotion centered on Krishna"
+  description_hi: "कृष्ण-केंद्रित भागवत पुराण की शिक्षाएं, कथाएं और भक्ति"
+  icon: "📚"
+  subdirectory: "srimad-bhagavat"
+  permalink_base: "/srimad-bhagavat/"
+  landing_url: "/srimad-bhagavat/"
+  total_verses: 3
+  enabled: false
