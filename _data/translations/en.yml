@@ -4,7 +4,7 @@ site_description: "An interactive guide to Krishna's teachings across sacred tex
 
 # Navigation
 home_nav: "Home"
-guidance: "Spiritual Guidance"
+guidance: "Ask Krishna"
 search_nav: "Search"
 book: "Book Generator"
 full_gita: "Full Gita"
@@ -43,11 +43,11 @@ modern_minimalist: "Modern Minimalist"
 traditional: "Traditional"
 
 # Guidance
-guidance: "Spiritual Guidance"
+guidance: "Ask Krishna"
 
 # Guidance page
 guidance_page:
-  title: "Spiritual Guidance"
+  title: "Ask Krishna"
   subtitle: "Ask questions about Krishna's teachings"
   input_placeholder: "e.g., How do I overcome anxiety and fear?"
   api_key_prompt: "OpenAI API Key Required"
